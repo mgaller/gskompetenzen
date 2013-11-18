@@ -25,11 +25,16 @@ $(function() {
         ],
         'skill': [
             '{% url "admin:gsaudit_skill_add" %}',
-            '{% url "admin:gsaudit_skill_changelist" %}'
+            '{% url "admin:gsaudit_skill_changelist" %}',
+            '{% url "gsadmin-skilltrees" %}'
         ],
         'teacher': [
             '{% url "admin:gsaudit_teacher_add" %}',
             '{% url "admin:gsaudit_teacher_changelist" %}'
+        ],
+        'subject': [
+            '{% url "admin:gsaudit_subject_add" %}',
+            '{% url "admin:gsaudit_subject_changelist" %}'
         ]
     })
 })
@@ -42,7 +47,7 @@ $(function() {
     <a href="{% url "admin:gsaudit_grade_changelist" %}" class="gsaudit-grade-icon" data-link-id="grade" ><span></span>Grade</a>
     <a href="{% url "admin:gsaudit_teacher_changelist" %}" class="gsaudit-teacher-icon" data-link-id="teacher"><span></span>Teacher</a>
     <a href="{% url "admin:gsaudit_pupil_changelist" %}" class="gsaudit-pupil-icon" data-link-id="pupil"><span></span>Pupil</a>
-    <a href="{% url "admin:gsaudit_skill_changelist" %}" class="gsaudit-skill-icon" data-link-id="skill"><span></span>Skill</a>
-
+    <a href="{% url "gsadmin-skilltrees" %}" class="gsaudit-skill-icon" data-link-id="skill"><span></span>Skill</a>
+    <a href="{% url "admin:gsaudit_subject_changelist" %}" class="gsaudit-subject-icon" data-link-id="subject"><span></span>Subject</a>
 {% endblock %}
 admin:gsaudit_school

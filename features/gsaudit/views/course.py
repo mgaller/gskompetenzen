@@ -112,12 +112,14 @@ def subject_statistics(request, grade_id=0, subject_id=0):
             info.save()
         
         subject_stats.append({'evaluation': eval_helper, 'info': info})
-
+    
+    
     return render(request, 'gsaudit/course/subject_statistic.html', {
         'user': user, 
         'grade': grade,
         'subject': subject,
         'categories': eval_helper.categories,
+        'written_exams': eval_helper.written_exams,
         'subject_stats': subject_stats,
         'subject_statistic_view': True,
     })

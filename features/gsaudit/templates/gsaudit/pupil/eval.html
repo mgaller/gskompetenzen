@@ -10,10 +10,19 @@
     
     <ul class="nested-list">
             <li class="nested-list-headline">
-                <div class="nested-list-node ">Mündlich</div>
+                <div class="nested-list-node ">
+                    Mündlich
+                    <span class="category-avg" >
+                    {% if evaluation.skill_rating > 0 %}
+                        {{ evaluation.skill_rating|display_grade }}
+                    {% else %}
+                        Keine Daten
+                    {% endif %}
+                    </span>
+                </div>
             </li>
             {% for cat in evaluation.categories %}
-                    <li >
+                    <li>
                         {% with node=cat.cat  avg=cat.avg %}
                             <div class="nested-list-node">
                                 {% include "gsaudit/pupil/eval_node.html" %}
@@ -59,9 +68,9 @@
         <li class="nested-list-headline">
             <div class="nested-list-node">
                 Schriftlich
-                <span style="">({{ evaluation.remaining_weight }}%)</span>
+                
                 <span class="category-avg" >
-                {% if evaluation.written_exams_rating != 0 and evaluation.written_exams_rating != -1 %}
+                {% if evaluation.written_exams_rating > 0 %}
                     {{ evaluation.written_exams_rating|display_grade }}
                 {% else %}
                     Keine Daten
@@ -83,16 +92,6 @@
     
 
 
-    <div class="eval-result">
-        Errechnete Gesamtnote
-        <span>
-            {% if evaluation.total_rating != -1 %}
-                {{ evaluation.total_rating|display_grade }}
-            {% else %}
-                Nicht genug Daten
-            {% endif %}
-        </span>
-    </div>
 
 
 <style>

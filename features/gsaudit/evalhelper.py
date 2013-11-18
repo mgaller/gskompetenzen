@@ -155,41 +155,23 @@ class EvaluationHelper(object):
         self._categories = None
         self._avg = None
         self._exams = None
-        self.remaining_weight = 0
         self._calculate()
     
     def _calculate(self):
         if not self._avg:
-            avg = 0
-            weighted_avg = 0
+            avg = 0.0
             count = 0
-            weighted_valid = True
-            total_weight = 0
             for item in self.categories:
             
                 item_avg = item.avg
-                total_weight += item.cat.weight
                 if item_avg != -1:
                     count += 1
                     avg += item_avg
-                    weighted_avg += item_avg * item.cat.weight
-                    
-                else:
-                    weighted_valid = False
             
             self._avg = -1
-            self.weighted_avg = -1
-            self.skills_total_weight = total_weight
-            self.remaining_weight = 100 - self.skills_total_weight
             
-            if count:
-                #self._avg = avg / count
-                if weighted_valid:
-                    self._avg = weighted_avg / total_weight
-                    
-                    self.skills_weighted_abs = weighted_avg
-            #else:
-            #    self.skills_weighted_abs = 0
+            if count > 0:
+                self._avg = avg / count
 
     @property
     def skill_rating(self):
@@ -230,13 +212,6 @@ class EvaluationHelper(object):
             import traceback
             traceback.print_exc()
             
-    @property
-    def total_rating(self):
-        wer = self.written_exams_rating
-        if self._avg and self._avg != -1 and hasattr(self, "skills_weighted_abs"):
-            return (self.skills_weighted_abs + wer * self.remaining_weight) / 100
-        else:
-            return -1
     
     @property
     def categories(self):

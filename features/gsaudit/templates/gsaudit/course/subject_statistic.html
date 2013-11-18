@@ -1,28 +1,36 @@
 
-
 {% extends "gsaudit/course/frame.html" %}
 {% load i18n %}
 {% load gsaudit_tags %}
 
 {% block course_content %}
 
-
-
 <h1>Kompetenzentwicklung</h1>
 <table class="subject-stats" style="width: 100%;">
 	<thead>
 		<tr>
 			<th>Schüler</th>
-			{% for cat in categories %}
-			<th>{{ cat.cat.name }} ({{ cat.cat.weight }}%)</th>
-			{% endfor %}
-			<th>Errechnete Gesamtnote</th>
+			<th style="text-align: center" colspan="{{categories|length|add:"1"}}">Mündlich</th>
+			<th style="text-align: center" colspan="{{written_exams|length|add:"1"}}">Schriftlich</th>			
 		</tr>
 	</thead>
 	<tbody>
+		<tr>
+			<th></th>
+			{% for cat in categories %}
+			    <th>{{ cat.cat.name }}</th>
+			{% endfor %}
+			<th> Durchschnitt </th> 
+			{% for exam in written_exams %}
+                <th>{{exam.audit.name}}</th>
+			{% endfor %}
+			<th > Durchschnitt </th>
+		</tr>
+		
 		{% for stat in subject_stats %} 
 			<tr class="audit">
 				<td>{{ stat.info.pupil.last_name }}, {{ stat.info.pupil.first_name }}</td>
+
 				{% for cat in stat.evaluation.categories %}
 				<td>            
 					{% if cat.avg != -1 %}
@@ -33,14 +41,29 @@
 		        </td>
 				{% endfor %}
 				<td>
-					{% with total_rating=stat.evaluation.total_rating %}
-				    {% if total_rating != -1 %}
-				        {{ total_rating|display_grade }}
-				    {% else %}
-				        Nicht genug Daten
-				    {% endif %}
-				    {% endwith %}
+				{% if stat.evaluation.skill_rating != -1 %}
+				    {{stat.evaluation.skill_rating}}
+				{% else %}
+				    -
+				{% endif %}
 				</td>
+				
+				{% for written_exam in stat.evaluation.written_exams %}
+				     <td>
+				        {% if written_exam.avg != -1 %}
+        				    {{written_exam.avg|display_grade}}
+				        {% else %}
+                            -
+				        {% endif %}
+				    </td>
+				{% endfor %}
+		        <td>
+		            {% if stat.evaluation.written_exams_rating != -1 %}
+		                {{stat.evaluation.written_exams_rating}}
+		            {% else %}
+		                -
+		            {% endif %}
+		        </td>		
 			</tr>
 		{% endfor %}
 	</tbody>

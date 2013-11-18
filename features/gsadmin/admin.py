@@ -2,7 +2,7 @@
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
 from users.admin import UserAdmin
-from gsaudit.models import Grade, TeachingAssignment, Pupil, Skill, Teacher,School
+from gsaudit.models import Grade, TeachingAssignment, Pupil, Skill, Teacher,School,Subject
 from gsadmin.forms import TaAdminForm, GradeAdminForm, PupilAdminForm
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -84,7 +84,6 @@ class SkillAdmin(MPTTModelAdmin):
         return NewForm
     
     def save_model(self, request, obj, form, change):
-        obj.author = request.teacher
         obj.save()
         return obj
     
@@ -106,6 +105,15 @@ class SkillAdmin(MPTTModelAdmin):
             'root_node': root_node
         })
         return MPTTModelAdmin.add_view(self, request, form_url, extra_context=extra_context)
+   
+    def response_add(self, request, obj, post_url_continue=None):
+        
+        if request.POST.has_key('_save'):
+            return HttpResponseRedirect(reverse('gsadmin-skilltree', args=[obj.get_root().id]))
+        elif request.POST.has_key('_continue'):
+            return HttpResponseRedirect(reverse('admin:gsaudit_skill_change', args=[obj.id]))
+        elif request.POST.has_key('_addanother'):
+            return HttpResponseRedirect(reverse('admin:gsaudit_skill_add') + '?root_id=%s' % obj.get_root().id)
 
 
     def response_change(self, request, obj, *args, **kwargs):
@@ -139,6 +147,7 @@ admin.site.register(Grade, GradeAdmin)
 admin.site.register(Pupil, PupilAdmin)
 admin.site.register(Skill, SkillAdmin)
 admin.site.register(Teacher, TeacherAdmin)
+admin.site.register(Subject)
 
 
 
